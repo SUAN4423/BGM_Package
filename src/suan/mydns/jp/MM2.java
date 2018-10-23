@@ -287,7 +287,7 @@ public class MM2
 		{
 			if((change += 32) >= HzMu / Frequencyss[2])
 			{
-				System.out.println(change);
+				//System.out.println(change);
 				change -= HzMu / Frequencyss[2];
 				neiro += susumi;
 				if(neiro >= 8)
