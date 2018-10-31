@@ -11,6 +11,7 @@ import javax.sound.sampled.SourceDataLine;
 public class MM2
 {
 	public static double[][] Sn = new double[10][12];
+	public static double[] SnN = new double[16];
 	public static String[] Onkai = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 	public static final int C = 0, Cs = 1, D = 2, Ds = 3, E = 4, F = 5, Fs = 6, G = 7, Gs = 8, A = 9, As = 10, B = 11;
 
@@ -23,6 +24,9 @@ public class MM2
 	public long resktime = 0;
 
 	public static int HzMu = 48000;
+
+	public static final double FamicomHz = 1789772.5;
+	public static final int NoiseClock[] = {0x002, 0x004, 0x008, 0x010, 0x020, 0x030, 0x040, 0x050, 0x065, 0x07F, 0x0BE, 0x0FE, 0x17D, 0x1FC, 0x3F9, 0x7F2};
 
 	public static int onecool = 480;
 
@@ -44,6 +48,10 @@ public class MM2
 			Sn[i][9]  = 440.0000000000000 * Math.pow(2, i - 4); //ƒ‰
 			Sn[i][10] = 466.1637615180899 * Math.pow(2, i - 4);
 			Sn[i][11] = 493.8833012561241 * Math.pow(2, i - 4); //ƒV
+		}
+		for(int i = 0; i < 16; i++)
+		{
+			SnN[i] = HzMu / (FamicomHz / NoiseClock[i]);
 		}
 		AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
 				HzMu,
@@ -342,19 +350,19 @@ public class MM2
 			Volumes[3] = (VolumeR+0.5) * 1.0;
 		}
 
-		for(int i = (int) (Nokori / (int)Frequencyss[3]); i < b.length / (int)Frequencyss[3]; i++)
+		for(int i = (int) (Nokori / /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3])); i < b.length / /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]); i++)
 		{
 			reg >>>= 1;
 			reg |= ((reg ^ (reg >>> ((Duty + 2 - old) == 1.0f ? 6 : 1))) & 1) << 15;
-			b[(int) (i * (int)Frequencyss[3])] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp < 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8));
-        	for(int j = 1; j < (int)Frequencyss[3]; j++)
+			b[(int) (i * /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]))] = (byte) (((reg & 1) - 0.5) * 2 * Math.max(Math.min(((byte)(Volumes[3])*8), VolumeDownUp < 0 ? 127 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8), VolumeDownUp >= 0 ? 0 : MVolDUM[3] == 16 ? 127 : MVolDUM[3] * 8));
+        	for(int j = 1; j < /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]); j++)
         	{
     			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
-        		if(i * (int)Frequencyss[3] + j < onecool) b[(int) (i * (int)Frequencyss[3] + j)] = b[(int) (i * (int)Frequencyss[3])];
+        		if(i * /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]) + j < onecool) b[(int) (i * /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]) + j)] = b[(int) (i * /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]))];
         		else
         		{
         			TempN = b[b.length-1];
-        			Nokori = i * (int)Frequencyss[3] + j - onecool;
+        			Nokori = (int)(i * /*(int)*/((Frequencyss[3] == SnN[15] && old != 2) ? SnN[14] : Frequencyss[3]) + j - onecool);
         		}
         	}
 			Volumes[3] = Math.max(Math.min(Volumes[3] + VolumeDownUp, 16), 0);
